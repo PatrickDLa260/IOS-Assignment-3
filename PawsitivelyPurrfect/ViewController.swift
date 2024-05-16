@@ -45,6 +45,16 @@ class ViewController: UIViewController {
             self.imageView.image = image
         }
     }
+    
+    @IBAction func goToNextScreen(_ sender: UIButton) {
+        performSegue(withIdentifier: "Adopt a Dogs", sender: self)
+    }
+        
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "goToNextScreenSegue" {
+            // Pass data to the next view controller if needed
+        }
+    }
 
 }
 
