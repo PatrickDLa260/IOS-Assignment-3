@@ -5,19 +5,17 @@
 //  Created by MacBook on 13/5/2024.
 //
 
-
 import UIKit
 
 class ViewController: UIViewController {
     @IBOutlet weak var imageView: UIImageView!
-    
     @IBOutlet weak var pickerView: UIPickerView!
     
     var breeds: [String] = []
+    var selectedBreed: String?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-        // Do any additional setup after loading the view, typically from a nib.
         
         pickerView.dataSource = self
         pickerView.delegate = self
@@ -37,7 +35,6 @@ class ViewController: UIViewController {
             return
         }
         DogAPI.requestImageFile(url: imageURL, completionHandler: self.handleImageFileResponse(image:error:))
-        
     }
 
     func handleImageFileResponse(image: UIImage?, error: Error?) {
@@ -47,15 +44,16 @@ class ViewController: UIViewController {
     }
     
     @IBAction func goToNextScreen(_ sender: UIButton) {
-        performSegue(withIdentifier: "Adopt a Dogs", sender: self)
+        performSegue(withIdentifier: "goToNextScreenSegue", sender: self)
     }
         
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         if segue.identifier == "goToNextScreenSegue" {
-            // Pass data to the next view controller if needed
+            if let AdoptionViewController = segue.destination as? AdoptionViewController {
+                AdoptionViewController.breedName = selectedBreed
+            }
         }
     }
-
 }
 
 extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate {
@@ -73,8 +71,7 @@ extension ViewController: UIPickerViewDataSource, UIPickerViewDelegate {
     }
     
     func pickerView(_ pickerView: UIPickerView, didSelectRow row: Int, inComponent component: Int) {
+        selectedBreed = breeds[row]
         DogAPI.requestRandomImage(breed: breeds[row], completionHandler: handleRandomImageResponse(imageData:error:))
     }
-    
 }
-

@@ -6,3 +6,9 @@
 //
 
 import Foundation
+
+struct Dog: Codable {
+    let name: String
+    let description: String  // Add other properties as needed
+}
+
